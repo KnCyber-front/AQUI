@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Localização do Robo</title>
+
+    <!-- 1. Arquivo de estilos -->
+    <link rel="stylesheet" href="sen.css" />
+
+    <!-- 2. Google Maps API
+         ATENÇÃO: Substitua SUA_CHAVE_AQUI pela sua chave real da API do Google Maps.
+         Você obtém a chave em: https://console.cloud.google.com
+         O parâmetro "callback=initMap" diz ao Maps para chamar nossa função quando carregar. -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDs6LTizC_db7pTPGPsLdZ3FNMbpFj2tZo&callback=initMap"
+      async
+      defer
+    ></script>
+
+    <!-- 3. Nosso script de lógica (defer = executa após o HTML carregar) -->
+    <script src="map.js" defer></script>
+  </head>
+  <body>
+
+    <!-- Cabeçalho da página -->
+    <header class="header">
+      <div class="header__icon"></div>
+      <div class="header__text">
+        <h1 class="header__title">Localização do Robo</h1>
+        <p class="header__subtitle">Visualize sua posição em tempo real</p>
+      </div>
+      <!-- Botão de sair: limpa a sessão e volta ao login -->
+      <button class="btn-logout" onclick="sair()">Sair</button>
+    </header>
+
+    <!-- Área principal -->
+    <main class="main">
+
+      <!-- Painel de informações de coordenadas -->
+      <section class="info-panel">
+        <div class="info-card">
+          <span class="info-card__label">Latitude</span>
+          <!-- id="lat" é lido pelo JavaScript para exibir o valor -->
+          <span class="info-card__value" id="lat">—</span>
+        </div>
+        <div class="info-card">
+          <span class="info-card__label">Longitude</span>
+          <span class="info-card__value" id="lng">—</span>
+        </div>
+        <div class="info-card">
+          <span class="info-card__label">Precisão</span>
+          <span class="info-card__value" id="acc">—</span>
+        </div>
+      </section>
+
+      <!-- Botão que dispara a busca de localização -->
+      <!-- onclick="locateMe()" chama a função definida no map.js -->
+      <button class="btn-locate" onclick="locateMe()">
+        <span class="btn-locate__icon"></span>
+        Localizar
+      </button>
+
+      <!-- Mensagem de status exibida durante o processo -->
+      <!-- id="status" é atualizado pelo JavaScript -->
+      <p class="status-msg" id="status">Clique em "Localizar" para começar.</p>
+
+      <!-- Contêiner do mapa — o Google Maps injeta o mapa aqui via JavaScript -->
+      <!-- id="map" é obrigatório; o CSS define o tamanho visual -->
+      <div class="map-container">
+        <div id="map"></div>
+      </div>
+
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="footer">
+    </footer>
+
+  </body>
+</html>

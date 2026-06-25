@@ -7,7 +7,7 @@
   const sessao = sessionStorage.getItem("logado");
   if (!sessao) {
     // Sem sessão = não logado; redireciona para o login
-    window.location.href = "../pasta_login_registrar/index.html";
+    window.location.href = "index.html";
   }
 })();
 
