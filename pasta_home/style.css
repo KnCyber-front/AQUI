@@ -1,0 +1,266 @@
+/* ==========================================================
+   style.css — Estilos da página de localização
+   Organizado em seções: Reset → Tokens → Componentes
+   ========================================================== */
+
+
+/* ----------------------------------------------------------
+   1. RESET BÁSICO
+   Remove margens/paddings padrão do navegador e define
+   box-sizing: border-box (facilita cálculos de tamanho).
+   ---------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+
+/* ----------------------------------------------------------
+   2. TOKENS DE DESIGN (variáveis CSS)
+   Centralize cores, fontes e espaçamentos aqui.
+   Para trocar a identidade visual, mude só estas variáveis.
+   ---------------------------------------------------------- */
+:root {
+  /* Paleta */
+  --color-bg:        #0f1117;   /* fundo geral — quase preto */
+  --color-surface:   #1a1d27;   /* cartões e painel */
+  --color-border:    #2a2d3a;   /* bordas sutis */
+  --color-accent:    #4f8ef7;   /* azul primário — botão, destaque */
+  --color-accent-glow: rgba(79, 142, 247, 0.25);
+  --color-text:      #e2e6f0;   /* texto principal */
+  --color-muted:     #6b7280;   /* texto secundário */
+  --color-success:   #34d399;   /* status OK */
+  --color-error:     #f87171;   /* status erro */
+
+  /* Tipografia */
+  --font-sans: 'Segoe UI', system-ui, sans-serif;
+
+  /* Espaçamento base */
+  --space-sm:  0.5rem;
+  --space-md:  1rem;
+  --space-lg:  1.5rem;
+  --space-xl:  2rem;
+
+  /* Bordas arredondadas */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+}
+
+
+/* ----------------------------------------------------------
+   3. BASE DA PÁGINA
+   ---------------------------------------------------------- */
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;       /* empilha header → main → footer */
+  align-items: center;
+  padding: var(--space-xl) var(--space-md);
+  gap: var(--space-lg);
+}
+
+
+/* ----------------------------------------------------------
+   4. CABEÇALHO
+   ---------------------------------------------------------- */
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.header__icon {
+  font-size: 2.4rem;
+  line-height: 1;
+}
+
+.header__title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.header__subtitle {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  margin-top: 2px;
+}
+
+
+/* ----------------------------------------------------------
+   5. ÁREA PRINCIPAL
+   ---------------------------------------------------------- */
+.main {
+  width: 100%;
+  max-width: 860px;             /* largura máxima do conteúdo */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+
+/* ----------------------------------------------------------
+   6. PAINEL DE INFORMAÇÕES (latitude / longitude / precisão)
+   ---------------------------------------------------------- */
+.info-panel {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 colunas iguais */
+  gap: var(--space-md);
+}
+
+/* Card individual */
+.info-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md) var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: center;
+}
+
+.info-card__label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-muted);
+}
+
+.info-card__value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums; /* alinha números uniformemente */
+  color: var(--color-accent);
+}
+
+
+/* ----------------------------------------------------------
+   7. BOTÃO LOCALIZAR
+   ---------------------------------------------------------- */
+.btn-locate {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background: var(--color-accent);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+.btn-locate:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 18px var(--color-accent-glow);
+}
+
+.btn-locate:active {
+  transform: translateY(0);
+  opacity: 0.85;
+}
+
+/* Estado desabilitado — aplicado pelo JavaScript enquanto busca */
+.btn-locate:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-locate__icon {
+  font-size: 1.1rem;
+}
+
+
+/* ----------------------------------------------------------
+   8. MENSAGEM DE STATUS
+   ---------------------------------------------------------- */
+.status-msg {
+  font-size: 0.88rem;
+  color: var(--color-muted);
+  text-align: center;
+  min-height: 1.2em;           /* evita pular o layout ao trocar texto */
+  transition: color 0.3s;
+}
+
+/* Classes adicionadas pelo JavaScript para colorir o status */
+.status-msg.ok    { color: var(--color-success); }
+.status-msg.error { color: var(--color-error);   }
+
+
+/* ----------------------------------------------------------
+   9. CONTAINER DO MAPA
+   ---------------------------------------------------------- */
+.map-container {
+  width: 100%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;             /* recorta o mapa nos cantos arredondados */
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 32px rgba(0,0,0,0.4);
+}
+
+/* O div #map precisa ter altura explícita para o Google Maps renderizar */
+#map {
+  width: 100%;
+  height: 480px;
+  background: var(--color-surface); /* placeholder antes do mapa carregar */
+}
+
+
+/* ----------------------------------------------------------
+   10. RODAPÉ
+   ---------------------------------------------------------- */
+.footer {
+  font-size: 0.78rem;
+  color: var(--color-muted);
+  text-align: center;
+  padding-bottom: var(--space-md);
+}
+
+
+/* ----------------------------------------------------------
+   11. RESPONSIVIDADE
+   Em telas pequenas, os 3 cards ficam em coluna única.
+   ---------------------------------------------------------- */
+@media (max-width: 560px) {
+  .info-panel {
+    grid-template-columns: 1fr;
+  }
+
+  #map {
+    height: 320px;
+  }
+
+  .header__title {
+    font-size: 1.3rem;
+  }
+}
+
+
+/* ------ BOTÃO SAIR (header) ------ */
+.btn-logout {
+  margin-left: auto;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-muted);
+  font-size: 0.85rem;
+  padding: 0.4rem 1rem;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-logout:hover {
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
