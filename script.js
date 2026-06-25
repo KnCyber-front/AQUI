@@ -147,5 +147,5 @@ function handleRegister() {
   }));
 
   // ✅ REDIRECIONA para a tela home (mapa)
-  window.location.href = '../pasta_home/index.html';
+  window.location.href = 'home.html';
 }
